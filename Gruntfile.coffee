@@ -26,15 +26,14 @@ module.exports = (grunt)->
         src: ['src/lib/*.coffee']
       test:
         src: ['src/test/*.coffee']
+      watch:
+        src: ['src/**/*.coffee']
       options:
         no_trailing_whitespace:
           level: 'error'
         max_line_length:
           level: 'warn'
     coffee:
-      #compile:
-      #  files:
-      #    'out/lib/vender.js': ['src/vendor/*.coffee']
       lib:
         expand: true
         cwd: 'src/lib/'
@@ -74,8 +73,8 @@ module.exports = (grunt)->
         files: '<%= coffeelint.lib.src %>'
         tasks: ['coffeelint:lib']
       cofffeTest:
-        files: '<%= coffeelint.lib.src %>'
-        tasks: ['coffeelint:test', 'simplemocha']
+        files: '<%= coffeelint.watch.src %>'
+        tasks: ['default']
     clean: ['out/']
 
   # plugins.

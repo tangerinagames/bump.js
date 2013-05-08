@@ -1,60 +1,41 @@
-'use strict'
+sinon = require("sinon")
+should = require("should")
+Bump = require("../lib/bump").Bump
 
-bump_js = require('../lib/bump.js')
+describe "Bump", ->
+  
+  beforeEach ->
+    @bump = new Bump
+    @shape = name: "fakeshape"
 
-###
-======== A Handy Little Mocha Reference ========
-https://github.com/visionmedia/should.js
-https://github.com/visionmedia/mocha
+  describe "#add()", ->
+    it "should add a item", ->
+      @bump.add @shape
+      should.exist @bump._items.get(@shape)
 
-Mocha hooks:
-  before ()-> # before describe
-  after ()-> # after describe
-  beforeEach ()-> # before each it
-  afterEach ()-> # after each it
+    it "should not update a existing item", ->
+      @bump.add @shape # insert
+      @bump._items.get(@shape).foo = "bar"
+      @bump.add @shape # try update
+      @bump._items.get(@shape).should.have.property("foo", "bar")
 
-Should assertions:
-  should.exist('hello')
-  should.fail('expected an error!')
-  true.should.be.ok
-  true.should.be.true
-  false.should.be.false
+  describe "#addStatic()", ->
+    it "should add a static item", ->
+      @bump.addStatic @shape
+      @bump._items.get(@shape).static.should.be.true
 
-  (()-> arguments)(1,2,3).should.be.arguments
-  [1,2,3].should.eql([1,2,3])
-  should.strictEqual(undefined, value)
-  user.age.should.be.within(5, 50)
-  username.should.match(/^\w+$/)
+  describe "#remove()", ->
+    it "should remove a item", ->
+      @bump.add @shape
+      @bump.remove @shape
+      should.not.exist @bump._items.get(@shape)
 
-  user.should.be.a('object')
-  [].should.be.an.instanceOf(Array)
+  describe "#shouldCollide()", ->
+    it "should return true", ->
+      @bump.shouldCollide({}, {}).should.be.true
 
-  user.should.have.property('age', 15)
-
-  user.age.should.be.above(5)
-  user.age.should.be.below(100)
-  user.pets.should.have.length(5)
-
-  res.should.have.status(200) #res.statusCode should be 200
-  res.should.be.json
-  res.should.be.html
-  res.should.have.header('Content-Length', '123')
-
-  [].should.be.empty
-  [1,2,3].should.include(3)
-  'foo bar baz'.should.include('foo')
-  { name: 'TJ', pet: tobi }.user.should.include({ pet: tobi, name: 'TJ' })
-  { foo: 'bar', baz: 'raz' }.should.have.keys('foo', 'bar')
-
-  (()-> throw new Error('failed to baz')).should.throwError(/^fail.+/)
-
-  user.should.have.property('pets').with.lengthOf(4)
-  user.should.be.a('object').and.have.property('name', 'tj')
-###
-
-describe 'Awesome', ()->
-  describe '#of()', ()->
-
-    it 'awesome', ()->
-      bump_js.awesome().should.eql('awesome')
-
+  describe "#getBBox()", ->
+    it "should return the bounding box of a shape", ->
+      @shape.getBBox = sinon.stub().returns(bbox = [10, 30, 40, 50])
+      @bump.getBBox(@shape).should.eql(bbox)
+      @shape.getBBox.called.should.be.true
