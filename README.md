@@ -3,11 +3,11 @@
 A very minimal collision detection library for JavaScript
 
 ## Getting Started
-Install the module with: `npm install bump.js`
+Install the module with: `npm install bump`
 
 ```javascript
-var bump_js = require('bump.js');
-bump_js.awesome(); // "awesome"
+Bump = require('bump').Bump;
+var bump = new Bump()
 ```
 
 ## Documentation
