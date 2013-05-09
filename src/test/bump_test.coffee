@@ -6,8 +6,8 @@ describe "Bump", ->
   
   beforeEach ->
     @bump = new Bump
-    @shape = name: "fakeshape"
-
+    @shape = getBBox: sinon.stub().returns(@bbox = [10, 30, 40, 50])
+    
   describe "#add()", ->
     it "should add a item", ->
       @bump.add @shape
@@ -36,6 +36,23 @@ describe "Bump", ->
 
   describe "#getBBox()", ->
     it "should return the bounding box of a shape", ->
-      @shape.getBBox = sinon.stub().returns(bbox = [10, 30, 40, 50])
-      @bump.getBBox(@shape).should.eql(bbox)
+      @bump.getBBox(@shape).should.eql(@bbox)
       @shape.getBBox.called.should.be.true
+
+  describe "#collide()", ->
+    it "should collide two objects", (done) ->
+      shape1 = name: "shape1", getBBox: -> [10, 10, 10, 10]
+      shape2 = name: "shape2", getBBox: -> [15, 10, 10, 10]
+
+      @bump.add(shape1)
+      @bump.add(shape2)
+
+      @bump.collision = (item1, item2, dx, dy) ->
+        item1.name.should.be.eql(shape1.name)
+        item2.name.should.be.eql(shape2.name)
+        dx.should.be.eql(-5)
+        dy.should.be.eql(0)
+        done()
+
+      @bump.collide()
+
