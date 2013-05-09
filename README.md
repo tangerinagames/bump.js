@@ -1,4 +1,4 @@
-# bump.js
+# bump.js [![Build Status](https://travis-ci.org/tangerinagames/bump.js.png)](https://travis-ci.org/tangerinagames/bump.js)
 
 A very minimal collision detection library for JavaScript
 
@@ -10,17 +10,8 @@ Bump = require('bump').Bump;
 var bump = new Bump()
 ```
 
-## Documentation
-_(Coming soon)_
-
 ## Examples
 _(Coming soon)_
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_
 
 ## License
 Copyright (c) 2013 Jairo Luiz  
